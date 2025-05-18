@@ -100,7 +100,7 @@ GC_freq = pd.DataFrame()
 for i in range(size_range[0],size_range[1]+1):
     current_path = frequency_prefix+str(i)+'bp.GC_frequency.txt'
     current_data = pd.read_csv(current_path,sep='\t')
-    GC_freq = GC_freq.append(current_data, ignore_index=True)
+    GC_freq = pd.concat([GC_freq,current_data],ignore_index=True)
     
 GC_freq['GC_content']=GC_freq['num_GC']/GC_freq['length']
 GC_freq = GC_freq.sort_values(by=['GC_content','length']).reset_index(drop=True)
@@ -134,7 +134,7 @@ for length in range(size_range[0],size_range[1]+1):
 
     #normalize to a mean of 1 for each fragment length(compute GC bias does this same thing)
     current['GC_bias'] = current['GC_bias']/np.nanmean(current['GC_bias'])
-    new_df = new_df.append(current, ignore_index=True)
+    new_df = pd.concat([new_df,current],ignore_index=True)
     
     #print(length,len(current['GC_bias']),np.nanmean(current['GC_bias']))
     
@@ -204,7 +204,7 @@ for length in new_df['length'].unique():
     #normalize to a mean of 1
     current['smoothed_GC_bias'] = current['smoothed_GC_bias']/np.nanmean(current['smoothed_GC_bias'])
     
-    new_df2 = new_df2.append(current,ignore_index=True)
+    new_df2 = pd.concat([new_df2,current],ignore_index=True)
     
     #print(length,len(current),np.nanmean(current['smoothed_GC_bias']))
     

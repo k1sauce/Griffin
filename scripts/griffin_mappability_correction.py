@@ -18,8 +18,6 @@ import pysam
 from matplotlib import pyplot as plt
 from statsmodels.nonparametric.smoothers_lowess import lowess
 
-from multiprocessing import Pool
-
 
 
 # In[3]:
@@ -167,7 +165,7 @@ for chrom in chroms:
     chr_sampling_set['end'] = chr_sampling_set['start']+bin_length
     #replace the last bin end with the max value
     chr_sampling_set['end'] = np.where(chr_sampling_set['end']>max_val,max_val,chr_sampling_set['end'])
-    sampling_set = sampling_set.append(chr_sampling_set,ignore_index = True)
+    sampling_set = pd.concat([sampling_set,chr_sampling_set],ignore_index=True)
     del(max_val,chr_sampling_set)
 sampling_set = sampling_set[['chrom','start','end']]
 print('sampling', len(sampling_set),'bins',bin_length, 'bp per bin')
@@ -310,9 +308,9 @@ del(sampled_counts,random_sample,non_outliers,bins,i)
 start_time = time.time()
 indexes = np.arange(len(sampling_set))
 
-p = Pool(processes=CPU) #use the available CPU
-results = p.map(process_segment, indexes, 1)
-
+# p = Pool(processes=CPU) #use the available CPU
+# results = p.map(process_segment, indexes, 1)
+results = [process_segment(index) for index in indexes] #run the function on each sublist
 
 # In[12]:
 

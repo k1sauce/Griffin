@@ -207,7 +207,7 @@ current = (pd.Series(rv_GC_dict)+pd.Series(fw_GC_dict)).reset_index()
 current = current.rename(columns={'index':'num_GC',0:'number_of_fragments'})
 current['length']=fragment_length
 current = current[['length','num_GC','number_of_fragments']]
-GC_df = GC_df.append(current, ignore_index=True)
+GC_df = pd.concat([GC_df, current], ignore_index=True)
 GC_df.to_csv(out_file,sep='\t',index=False)
 
 

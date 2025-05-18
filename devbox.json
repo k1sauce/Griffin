@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.2/.schema/devbox.schema.json",
+  "packages": [
+    "clang@latest",
+    "libcxx@latest",
+    "libcxxabi@latest",
+    "zlib@latest",
+    "python@latest",
+    "samtools@latest",
+    "bedtools@latest",
+    "curl@latest",
+    "gcc@latest",
+    "pkg-config@latest"
+  ],
+  "shell": {
+    "init_hook": [
+      "export PKG_CONFIG_PATH=/nix/store/mflw0qpjw03rdpjai0qkg5vn1zxlvfdi-zlib-1.3.1-dev/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}",
+      "export PKG_CONFIG_PATH_FOR_TARGET=/nix/store/mflw0qpjw03rdpjai0qkg5vn1zxlvfdi-zlib-1.3.1-dev/lib/pkgconfig",
+      "export PKG_CONFIG_LIBDIR=/nix/store/mflw0qpjw03rdpjai0qkg5vn1zxlvfdi-zlib-1.3.1-dev/lib/pkgconfig",
+      "export LDFLAGS=\"-L/nix/store/mflw0qpjw03rdpjai0qkg5vn1zxlvfdi-zlib-1.3.1-dev/lib $LDFLAGS\"",
+      "export CFLAGS=\"-I/nix/store/mflw0qpjw03rdpjai0qkg5vn1zxlvfdi-zlib-1.3.1-dev/include $CFLAGS\"",
+      "export CXXFLAGS=\"-I/nix/store/mflw0qpjw03rdpjai0qkg5vn1zxlvfdi-zlib-1.3.1-dev/include $CXXFLAGS\"",
+      "echo 'Welcome to devbox!' > /dev/null"
+    ],
+    "scripts": {
+      "test": [
+        "echo \"Error: no test specified\" && exit 1"
+      ]
+    }
+  }
+}

@@ -68,7 +68,7 @@ def define_fetch_interval(name_to_print,sites,chrom_column,position_column,chrom
     rv_sites['fetch_end'] = rv_sites[position_column]-upstream_bp
     
     #merge fw and reverse back together and sort them back into the original order
-    sites = fw_sites.append(rv_sites).append(undirected_sites).sort_index()
+    sites = pd.concat([fw_sites,rv_sites,undirected_sites],ignore_index=True)
     sites = sites.sort_values(by = [chrom_column,position_column]).reset_index(drop=True)
 
     chrom_sizes = pd.read_csv(chrom_sizes_path, sep='\t', header=None)
@@ -82,7 +82,7 @@ def define_fetch_interval(name_to_print,sites,chrom_column,position_column,chrom
         current = sites[sites[chrom_column]==chrom].copy()
         current['fetch_start'] = np.where(current['fetch_start']<0,0,current['fetch_start'])
         current['fetch_end'] = np.where(current['fetch_end']>length,length,current['fetch_end'])    
-        adjusted_ends_df = adjusted_ends_df.append(current)
+        adjusted_ends_df = pd.concat([adjusted_ends_df,current],ignore_index=True)
     adjusted_ends_df = adjusted_ends_df.sort_values(by = [chrom_column,position_column]).reset_index(drop=True)
     adjusted_ends_df = adjusted_ends_df.copy()
 

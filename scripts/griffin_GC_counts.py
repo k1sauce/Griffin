@@ -13,7 +13,6 @@ import time
 import argparse
 import sys
 
-from multiprocessing import Pool
 
 
 
@@ -159,10 +158,11 @@ def collect_reads(sublist):
 
 
 start_time = time.time()
-p = Pool(processes=CPU) #use the available CPU
+# p = Pool(processes=CPU) #use the available CPU
 sublists = np.array_split(mappable_intervals,CPU) #split the list into sublists, one per CPU
 
-GC_dict_list = p.map(collect_reads, sublists, 1)
+GC_dict_list = [collect_reads(sublist) for sublist in sublists] #run the function on each sublist
+#GC_dict_list = p.map(collect_reads, sublists, 1)
 
 
 # In[ ]:
@@ -176,7 +176,7 @@ for i,GC_dict in enumerate(GC_dict_list):
         current = current.rename(columns={'index':'num_GC',0:'number_of_fragments'})
         current['length']=length
         current = current[['length','num_GC','number_of_fragments']]
-        GC_df = GC_df.append(current, ignore_index=True)
+        GC_df = pd.concat([GC_df, current], ignore_index=True)
     GC_df = GC_df.set_index(['length','num_GC'])
     all_GC_df[i] = GC_df['number_of_fragments']
     del(GC_df,GC_dict)

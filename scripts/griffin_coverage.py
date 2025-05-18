@@ -14,7 +14,6 @@ import pyBigWig
 import numpy as np
 import time
 import yaml 
-from multiprocessing import Pool
 
 
 # In[ ]:
@@ -293,7 +292,7 @@ all_sites = pd.DataFrame()
 for site_name in sites.keys():
     site_file = sites[site_name]
     current_sites = griffin_functions.import_and_filter_sites(site_name,site_file,strand_column,chrom_column,position_column,chroms,ascending,sort_by,number_of_sites)
-    all_sites = all_sites.append(current_sites, ignore_index=True).copy()
+    all_sites = pd.concat([all_sites, current_sites], ignore_index=True)
     sys.stdout.flush()
 
 
@@ -452,8 +451,7 @@ print('Starting fetch')
 sys.stdout.flush()
 start_time = time.time()
 
-p = Pool(processes=CPU) #use the specified number of processes
-results = p.map(collect_fragments, to_fetch.values, 1) #Send only one interval to each processor at a time.
+results = [collect_fragments(row) for row in to_fetch.values]
 
 elapsed_time = time.time()-overall_start_time
 print('Done with fetch '+str(int(np.floor(elapsed_time/60)))+' min '+str(int(np.round(elapsed_time%60)))+' sec')

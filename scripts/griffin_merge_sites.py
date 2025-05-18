@@ -15,7 +15,6 @@ import time
 from scipy.signal import savgol_filter
 from scipy.stats import zscore
 import yaml 
-from multiprocessing import Pool
 import pybedtools
 
 
@@ -608,8 +607,9 @@ def merge_sites(input_list):
 #run the analysis 
 to_do_list = [[key,sites[key]] for key in sites.keys()]
 
-p = Pool(processes=CPU) #use the specified number of processes
-results = p.map(merge_sites, to_do_list, 1) #Send only one interval to each processor at a time.
+# p = Pool(processes=CPU) #use the specified number of processes
+# results = p.map(merge_sites, to_do_list, 1) #Send only one interval to each processor at a time.
+results = [merge_sites(item) for item in to_do_list] #run the function on each sublist
 
 elapsed_time = time.time()-overall_start_time
 print('Done_calculating profiles '+str(int(np.floor(elapsed_time/60)))+' min '+str(int(np.round(elapsed_time%60)))+' sec')
@@ -623,7 +623,7 @@ sys.stdout.flush()
 for key in results_dict_template.keys():
     current_results = pd.DataFrame()
     for i in range(len(results)):
-        current_results = current_results.append(results[i][key]['coverage'])
+        current_results = pd.concat([current_results, results[i][key]['coverage']], ignore_index=True)
     current_out_path = results_sample_dir+'/'+sample_name+'.'+key+'.coverage.tsv'
     current_results.to_csv(current_out_path,sep='\t', index = False, float_format='%.5f')
 
