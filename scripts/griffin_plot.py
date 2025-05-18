@@ -142,6 +142,7 @@ for j,site_name in enumerate(site_names):
         axes[-1].legend(bbox_to_anchor=[1,1],loc = 'upper left',ncol=2)
 
     fig.tight_layout()
+    os.makedirs(out_dir+'/plots/', exist_ok=True)
     plt.savefig(out_dir+'/plots/'+site_name+'.pdf')
     plt.close('all')
     if j%20==0:
