@@ -10,7 +10,8 @@
     "bedtools@latest",
     "curl@latest",
     "gcc@latest",
-    "pkg-config@latest"
+    "pkg-config@latest",
+    "curl.dev"
   ],
   "shell": {
     "init_hook": [

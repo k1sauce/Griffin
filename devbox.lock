@@ -97,6 +97,10 @@
         }
       }
     },
+    "curl.dev": {
+      "resolved": "github:NixOS/nixpkgs/12a55407652e04dcf2309436eb06fef0d3713ef3?narHash=sha256-N4cp0asTsJCnRMFZ%2Fk19V9akkxb7J%2FopG%2BK%2BjU57JGc%3D#curl.dev",
+      "source": "nixpkg"
+    },
     "curl@latest": {
       "last_modified": "2025-05-12T14:38:58Z",
       "resolved": "github:NixOS/nixpkgs/eaeed9530c76ce5f1d2d8232e08bec5e26f18ec1#curl",
