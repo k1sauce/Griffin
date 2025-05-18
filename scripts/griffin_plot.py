@@ -99,7 +99,7 @@ for sample in samples:
             current = current.groupby('site_name')[str_save_columns].mean()
             current = current.reset_index() #retain site_name
             current['sample'] = sample
-        results_dict[key] = results_dict[key].append(current, ignore_index=True)
+        results_dict[key] = pd.concat([results_dict[key], current], ignore_index=True)
 
 site_names = results_dict['uncorrected']['site_name'].unique()
 
