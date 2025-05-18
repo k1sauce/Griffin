@@ -48,6 +48,7 @@ ptyprocess==0.7.0
 PuLP==3.1.1
 pure_eval==0.2.3
 pybedtools @ file:///Users/kyle/Projects/Griffin/pybedtools-0.12.0
+pyBigWig @ file:///Users/kyle/Projects/Griffin/pybigwig-0.3.24
 Pygments==2.19.1
 pyparsing==3.2.3
 pysam==0.23.0
