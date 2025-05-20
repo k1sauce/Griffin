@@ -16,7 +16,7 @@ from scipy.signal import savgol_filter
 from scipy.stats import zscore
 import yaml 
 import pybedtools
-
+from pathlib import Path
 
 # In[ ]:
 
@@ -263,22 +263,18 @@ print('Excluding bins with zero mappability:',exclude_zero_mappability_parameter
 
 #snakemake should create these folders, but if not using the snakemake, this is needed
 tmp_sample_dir = tmp_dir+'/'+sample_name
-if not os.path.exists(tmp_sample_dir): 
-    os.mkdir(tmp_sample_dir)
+Path(tmp_sample_dir).mkdir(parents=True, exist_ok=True)
 
 tmp_pybedtools = tmp_sample_dir+'/tmp_pybedtools2'
-if not os.path.exists(tmp_pybedtools): 
-    os.mkdir(tmp_pybedtools)
+Path(tmp_pybedtools).mkdir(parents=True, exist_ok=True)
 pybedtools.set_tempdir(tmp_pybedtools)
 
 tmp_bigWig = tmp_sample_dir+'/tmp_bigWig'
-if not os.path.exists(tmp_bigWig): 
-    os.mkdir(tmp_bigWig)
+Path(tmp_bigWig).mkdir(parents=True, exist_ok=True)
 
 #make results dir
 results_sample_dir = results_dir+'/'+sample_name
-if not os.path.exists(results_sample_dir): 
-    os.mkdir(results_sample_dir)
+Path(results_sample_dir).mkdir(parents=True, exist_ok=True)
 
 
 # In[ ]:

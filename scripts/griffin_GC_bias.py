@@ -13,7 +13,7 @@ import time
 import argparse
 import sys
 from matplotlib import pyplot as plt
-
+from pathlib import Path
 
 # In[ ]:
 
@@ -83,11 +83,9 @@ sys.stdout.flush()
 # In[6]:
 
 
-#create output folders if needed
-if not os.path.exists(out_dir +'/GC_plots/'):
-    os.mkdir(out_dir +'/GC_plots/')
-if not os.path.exists(out_dir +'/GC_bias/'):
-    os.mkdir(out_dir +'/GC_bias/')
+# create output folders if needed
+Path(out_dir +'/GC_plots/').mkdir(parents=True, exist_ok=True)
+Path(out_dir +'/GC_bias/').mkdir(parents=True, exist_ok=True)
 
 
 # In[7]:

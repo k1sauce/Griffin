@@ -13,7 +13,7 @@ import time
 import argparse
 import sys
 
-
+from pathlib import Path
 
 
 # In[ ]:
@@ -75,9 +75,8 @@ out_file = out_dir +'/GC_counts/'+ bam_file_name+'.GC_counts.txt'
 
 print('out_file',out_file)
 
-#create a directory for the GC data
-if not os.path.exists(out_dir +'/GC_counts/'):
-    os.mkdir(out_dir +'/GC_counts/')
+# create a directory for the GC data
+Path(out_dir +'/GC_counts/').mkdir(parents=True, exist_ok=True)
 
 
 # In[ ]:
