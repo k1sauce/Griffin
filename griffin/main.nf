@@ -1,66 +1,13 @@
 #!/usr/bin/env nextflow
+include { GRIFFIN_GC_COUNTS } from './modules/local/GRIFFIN_GC_COUNTS.nf'
+include { GRIFFIN_GC_BIAS } from './modules/local/GRIFFIN_GC_BIAS.nf'
 
-params.input = "$baseDir/input/*.bam"
-params.output = "$baseDir/results"
+workflow GRIFFIN_GC_AND_MAPPABILITY_CORRECTION {
 
-process GRIFFIN_GC_COUNTS {
-
-    tag "$meta.id"
-
-    input:
-    tuple val(meta), path(bam), path(bai)
-    val mappable_regions_path
-    val ref_seq
-    val chrom_sizes
-    val map_q
-    val size_range_low
-    val size_range_high
-
-    output:
-    tuple val(meta), path("*.GC_counts.txt"), emit: gc_counts
-
-    script:
-    """
-    griffin_GC_counts.py \\
-        --bam_file ${bam} \\
-        --bam_file_name ${meta.bam_file_name} \\
-        --index_file_path ${bai} \\
-        --mappable_regions_path ${mappable_regions_path} \\
-        --ref_seq ${ref_seq} \\
-        --chrom_sizes ${chrom_sizes} \\
-        --map_q ${map_q} \\
-        --size_range ${size_range_low} ${size_range_high} \\
-        --CPU 1
-    """
-}
-
-process GRIFFIN_GC_BIAS {
-
-    tag "$meta.id"
-
-    input:
-    tuple val(meta), path(gc_counts)
-    val mappable_name // 'k100_minus_exclusion_lists.mappable_regions.hg38'
-    val genome_GC_frequency // './Ref/genome_GC_frequency'
-    val size_range_low
-    val size_range_high // [15, 500]
-
-    output:
-    path "*.GC_bias.txt"
-
-    script:
-    """
-    griffin_GC_bias.py \\
-        --gc_counts ${gc_counts} \\
-        --bam_file_name ${meta.bam_file_name} \\
-        --mappable_name ${mappable_name} \\
-        --genome_GC_frequency ${genome_GC_frequency} \\
-        --size_range ${size_range_low} ${size_range_high}
-    """
-}
-
-workflow GRIFFIN {
-
+    main:
+    // This is for running starting from GRIFFIN_GC_COUNTS but 
+    // its a bit slow
+    //
     // input_ch = Channel.from([
     //     [
     //         [
@@ -78,14 +25,6 @@ workflow GRIFFIN {
     map_q = 20
     size_range_low = 15
     size_range_high = 500
-
-    // GC bias parameters
-    mappable_name = 'k100_minus_exclusion_lists.mappable_regions.hg38'
-    genome_GC_frequency_ch = Channel.fromPath(
-        '/Users/kyle/Projects/Griffin/Ref/genome_GC_frequency', 
-        type : 'dir', 
-        maxDepth : 0
-    )
 
     // GRIFFIN_GC_COUNTS(
     //     input_ch,
@@ -109,6 +48,14 @@ workflow GRIFFIN {
         ]
     ])
 
+    // Additional GC bias parameters
+    mappable_name = 'k100_minus_exclusion_lists.mappable_regions.hg38'
+    genome_GC_frequency_ch = Channel.fromPath(
+        '/Users/kyle/Projects/Griffin/Ref/genome_GC_frequency', 
+        type : 'dir', 
+        maxDepth : 0
+    )
+
     GRIFFIN_GC_BIAS(
         input_ch,
         mappable_name,
@@ -116,6 +63,16 @@ workflow GRIFFIN {
         size_range_low,
         size_range_high
     )
+
+    emit:
+    gc_bias_txt = GRIFFIN_GC_BIAS.out.gc_bias_txt
+    gc_bias_pdf = GRIFFIN_GC_BIAS.out.gc_bias_pdf
+}
+
+
+workflow GRIFFIN {
+    GRIFFIN_GC_AND_MAPPABILITY_CORRECTION()
+
 }
 
 workflow {
