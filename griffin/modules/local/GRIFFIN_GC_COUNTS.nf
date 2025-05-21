@@ -27,4 +27,9 @@ process GRIFFIN_GC_COUNTS {
         --size_range ${size_range_low} ${size_range_high} \\
         --CPU 1
     """
+
+    stub:
+    """
+    touch ${meta.bam_file_name}.GC_counts.txt
+    """
 }

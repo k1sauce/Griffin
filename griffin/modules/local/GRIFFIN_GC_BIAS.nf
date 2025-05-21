@@ -22,4 +22,12 @@ process GRIFFIN_GC_BIAS {
         --genome_GC_frequency ${genome_GC_frequency} \\
         --size_range ${size_range_low} ${size_range_high}
     """
+
+    stub:
+    """
+    touch ${meta.bam_file_name}.GC_bias.txt
+    touch ${meta.bam_file_name}.GC_bias.pdf
+    touch ${meta.bam_file_name}.GC_bias.summary.pdf
+    touch ${meta.bam_file_name}.GC_bias.key_lengths.pdf
+    """
 }
