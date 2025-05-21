@@ -1,0 +1,15 @@
+results/
+run_demo/
+*.yaml
+pybedtools-0.12.0/
+pybigwig-0.3.24/
+demo/
+*.pyc
+*.fa
+*.fai
+*.bw
+*.DS_store
+work/
+*.log
+.nextflow/
+*.log.*
