@@ -27,6 +27,7 @@ def median_smoothing(current, fraction):
         medians.append(current_median)
     return medians
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -112,9 +113,6 @@ if __name__ == "__main__":
     new_df.sort_values(by=["GC_content", "length"], inplace=True)
     new_df.reset_index(drop=True, inplace=True)
 
-
-
-          
     # smooth GC bias by size bin
     new_df2 = pd.DataFrame()
     for length in new_df["length"].unique():
@@ -209,7 +207,6 @@ if __name__ == "__main__":
     fig.tight_layout()
     plt.savefig(plot_file1)
     plt.close("all")
-
 
     # key lengths
     selected_lengths = np.arange(100, 201, GC_smoothing_step)
