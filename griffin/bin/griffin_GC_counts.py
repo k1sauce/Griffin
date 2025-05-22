@@ -1,16 +1,14 @@
 #!/usr/bin/env python
 import pysam
-import os
 import pandas as pd
 import numpy as np
-import time
 import argparse
 import sys
-from pathlib import Path
+
 
 # Griffin special sauce, keep if you want to reproduce the
 # original results, this function is creating a dict like this:
-# {length: {num_GC: count}} for the reads in the bam file 
+# {length: {num_GC: count}} for the reads in the bam file
 # that overlap the mappable regions provided. Some reads are removed
 # based on the specific filtering criteria.
 #
@@ -154,7 +152,6 @@ if __name__ == "__main__":
     map_q = args.map_q
     size_range = args.size_range
     CPU = args.CPU
-    
 
     # import filter
     mappable_intervals = pd.read_csv(mappable_regions_path, sep="\t", header=None)
@@ -170,8 +167,4 @@ if __name__ == "__main__":
     ]
     GC_df = pd.DataFrame(rows)
     GC_df = GC_df.sort_values(by=["length", "num_GC"])
-    GC_df.to_csv(
-        f'{bam_file_name}.GC_counts.txt', 
-        sep="\t", 
-        index=False
-    )
+    GC_df.to_csv(f"{bam_file_name}.GC_counts.txt", sep="\t", index=False)

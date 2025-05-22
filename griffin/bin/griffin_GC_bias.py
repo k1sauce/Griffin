@@ -67,14 +67,14 @@ if __name__ == "__main__":
 
     # For now I'm going to keep the smoothing bin size as a set variable
     GC_smoothing_step = 20
-    
+
     # output is smoothed version
-    smoothed_out_file = f'{bam_file_name}.GC_bias.txt'
+    smoothed_out_file = f"{bam_file_name}.GC_bias.txt"
 
     # plot files
-    plot_file1 = f'{bam_file_name}.GC_bias.pdf'
-    plot_file2 = f'{bam_file_name}.GC_bias.summary.pdf'
-    plot_file3 = f'{bam_file_name}.GC_bias.key_lengths.pdf'
+    plot_file1 = f"{bam_file_name}.GC_bias.pdf"
+    plot_file2 = f"{bam_file_name}.GC_bias.summary.pdf"
+    plot_file3 = f"{bam_file_name}.GC_bias.key_lengths.pdf"
 
     # import the GC info from the genome
     frequency_prefix = genome_GC_frequency + "/" + mappable_name + "."
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     # Calculate the GC content of the sample
     GC_df["GC_content"] = GC_df["num_GC"] / GC_df["length"]
     GC_df = GC_df.sort_values(by=["GC_content", "length"]).reset_index(drop=True)
-        
+
     # calculate the GC bias
     new_df = pd.merge(
         GC_df,
@@ -104,7 +104,9 @@ if __name__ == "__main__":
         right_on=["length", "GC_content"],
         suffixes=("", "_freq"),
     )
-    new_df["GC_bias"] = (new_df["number_of_fragments"] / new_df["number_of_fragments_freq"])
+    new_df["GC_bias"] = (
+        new_df["number_of_fragments"] / new_df["number_of_fragments_freq"]
+    )
     # calculate the GC bias for each length using groupby
     new_df["GC_bias"] = new_df.groupby("length")["GC_bias"].transform(
         lambda x: x / np.nanmean(x)
