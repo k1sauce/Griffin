@@ -59,7 +59,7 @@ process GRIFFIN_MERGE_SITES {
     script:
     """
     griffin_merge_sites.py \\
-        --sample_name ${id} \\
+        --sample_name ${meta.id} \\
         --uncorrected_bw_path ${uncorrected_bw} \\
         --GC_corrected_bw_path ${corrected_bw} \\
         --mappability_bw ${mappability_bw} \\
@@ -86,9 +86,9 @@ process GRIFFIN_MERGE_SITES {
 
     stub:
     """
-    touch ${id}.Healthy_demo.GC_corrected.bw
-    touch ${id}.Healthy_demo.uncorrected.bw
-    touch ${id}.Healthy_demo.GC_corrected.coverage.tsv
-    touch ${id}.Healthy_demo.uncorrected.coverage.tsv
+    touch ${meta.id}.Healthy_demo.GC_corrected.bw
+    touch ${meta.id}.Healthy_demo.uncorrected.bw
+    touch ${meta.id}.Healthy_demo.GC_corrected.coverage.tsv
+    touch ${meta.id}.Healthy_demo.uncorrected.coverage.tsv
     """
 }

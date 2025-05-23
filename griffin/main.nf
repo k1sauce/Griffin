@@ -16,8 +16,8 @@ workflow GRIFFIN {
     chroms = ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr20', 'chr21', 'chr22']
     normalization_window = [-5000, 5000]
     size_range = [100, 200]
-    mappability_bw = file('/Users/kyle/Projects/Griffin/Ref/k100_minus_exclusion_lists.mappable_regions.hg38.bw')
-    save_window = [-100, 1000]
+    mappability_bw = file('/Users/kyle/Projects/Griffin/Ref/k100.Umap.MultiTrackMappability.bw')
+    save_window = [-1000, 1000]
     center_window = [-30, 30]
     fft_window = [-960, 960]
     fft_index = 10

@@ -103,58 +103,50 @@ def make_outlier_mask(results, site_name):
     return (outlier_mask, outlier_cutoff)
 
 
-def normalize_and_smooth(results, site_name, name):
-    # get the mean midpoints per valid position in each site
-    mean_reads_per_bp_in_normalization_window = (
-        np.nanmean(results[norm_columns], axis=1) / step
-    )
-    mean_reads_per_bp_in_saved_window = np.nanmean(results[save_columns], axis=1) / step
-
-    # normalize individual sites to 1 to remove CNA
-    if CNA_normalization.lower() == "true":
-        print(site_name, name, "normalizing CNAs")
-        mean_data = np.nanmean(results.values, axis=1, keepdims=True)
-        # replace zero with nan so there aren't any infinities in the output
-        mean_data = np.where(mean_data == 0, np.nan, mean_data)
-        results[norm_columns] = results[norm_columns] / mean_data
-
-    # take the mean of all sites
-    if not individual.lower() == "true":
-        print(site_name, name, "averaging sites")
-        results = pd.DataFrame(
-            pd.Series(np.nanmean(results[norm_columns], axis=0), index=norm_columns)
-        ).T
+def normalize_and_smooth(results,site_name,name, norm_columns, save_columns):
+    #get the mean midpoints per valid position in each site
+    mean_reads_per_bp_in_normalization_window = np.nanmean(results[norm_columns],axis = 1)/step
+    mean_reads_per_bp_in_saved_window = np.nanmean(results[save_columns],axis = 1)/step
+        
+    #normalize individual sites to 1 to remove CNA
+    if CNA_normalization.lower() == 'true':
+        print(site_name,name,'normalizing CNAs')
+        mean_data = np.nanmean(results.values,axis = 1, keepdims=True)
+        #replace zero with nan so there aren't any infinities in the output
+        mean_data = np.where(mean_data==0,np.nan,mean_data)
+        results[norm_columns] = results[norm_columns]/mean_data  
+        
+    #take the mean of all sites
+    if not individual.lower()=='true':
+        print(site_name,name,'averaging sites')
+        results = pd.DataFrame(pd.Series(np.nanmean(results[norm_columns], axis = 0), index=norm_columns)).T
         results.columns = norm_columns
-        mean_reads_per_bp_in_normalization_window = np.nanmean(
-            mean_reads_per_bp_in_normalization_window
-        )
-        mean_reads_per_bp_in_saved_window = np.nanmean(
-            mean_reads_per_bp_in_saved_window
-        )
-
-    # smooth the sites
-    if smoothing.lower() == "true":
-        print(site_name, name, "smoothing")
-        # savgol window should be approx one fragment length but it must be odd
-        savgol_window = np.floor(smoothing_length / step)
-        if savgol_window % 2 == 0:
-            savgol_window = savgol_window + 1
-        savgol_window = int(savgol_window)
+        mean_reads_per_bp_in_normalization_window = np.nanmean(mean_reads_per_bp_in_normalization_window)
+        mean_reads_per_bp_in_saved_window = np.nanmean(mean_reads_per_bp_in_saved_window)
+        
+    #smooth the sites
+    if smoothing.lower()=='true':
+        print(site_name,name,'smoothing')
+        #savgol window should be approx one fragment length but it must be odd
+        savgol_window=np.floor(smoothing_length/step)
+        if savgol_window%2==0:
+            savgol_window=savgol_window+1
+        savgol_window=int(savgol_window)
 
         results[norm_columns] = savgol_filter(results[norm_columns], savgol_window, 3)
-
-    # normalize the average site to 1
-    print(site_name, name, "correcting for read depth")
+    
+    #normalize the average site to 1
+    print(site_name,name,'correcting for read depth')
     mean_value = np.nanmean(results[norm_columns])
-    results[norm_columns] = results[norm_columns] / mean_value
-
-    # save only plot columns
+    results[norm_columns] = results[norm_columns]/mean_value
+    
+    #save only plot columns 
     results = results[save_columns].copy()
-    results[
-        "mean_reads_per_bp_in_normalization_window"
-    ] = mean_reads_per_bp_in_normalization_window
-    results["mean_reads_per_bp_in_saved_window"] = mean_reads_per_bp_in_saved_window
-    return results
+    
+    results['mean_reads_per_bp_in_normalization_window'] = mean_reads_per_bp_in_normalization_window
+    results['mean_reads_per_bp_in_saved_window'] = mean_reads_per_bp_in_saved_window
+    
+    return(results)
 
 
 def calculate_features(results):
@@ -323,12 +315,11 @@ def merge_sites(site_file, chroms):
     else:
         outlier_cutoff = "NA"
 
+    
     # normalize to a mean of 1 and smooth
+    #normalize to a mean of 1 and smooth
     for key in results_dict.keys():
-        results_dict[key]["coverage"] = normalize_and_smooth(
-            results_dict[key]["coverage"], site_name, key
-        )
-    sys.stdout.flush()
+        results_dict[key]['coverage'] = normalize_and_smooth(results_dict[key]['coverage'],site_name,key,norm_columns,save_columns)
 
     # get features
     for key in results_dict.keys():
