@@ -13,7 +13,7 @@
   --fft_window -960 960 \
   --fft_index 10 \
   --smoothing_length 165 \
-  --exclude_path ./griffin/excluded_regions.tsv \
+  --exclude_path ./griffin/excluded_regions.bed \
   --step 15 \
   --CNA_normalization False \
   --individual False \
@@ -26,20 +26,69 @@
 
 process GRIFFIN_MERGE_SITES {
     tag "$meta.id"
-    
+
     input:
-    val identifier
+    tuple val(meta), path(corrected_bw), path(uncorrected_bw)
+    path(mappability_bw)
+    path(chrom_sizes_path)
+    path(site_file) 
+    val(chroms)
+    val(norm_window)
+    val(save_window)
+    val(center_window)
+    val(fft_window)
+    val(fft_index)
+    val(smoothing_length)
+    path(exclude_path)
+    val(step)
+    val(cna_normalization_flag)
+    val(individual_flag)
+    val(smoothing_flag)
+    val(exclude_outliers_flag)
+    val(exclude_zero_mappability_flag)
+    val(number_of_sties)
+    val(site_name)
 
     output:
-    val identifier
+    tuple val(meta), path("${meta.id}.GC_corrected.coverage.tsv"), path("${meta.id}.uncorrected.coverage.tsv"), emit: merge_sites
+    tuple val(meta), path("${meta.id}.GC_corrected.bw"), emit: gc_corrected_bw
+    tuple val(meta), path("${meta.id}.uncorrected.bw"), emit: uncorrected_bw
+    tuple val(meta), path("${meta.id}.GC_corrected.coverage.tsv"), emit: gc_corrected_coverage_tsv
+    tuple val(meta), path("${meta.id}.uncorrected.coverage.tsv"), emit: uncorrected_coverage_tsv
 
     script:
     """
-    
+    griffin_merge_sites.py \\
+        --sample_name ${id} \\
+        --uncorrected_bw_path ${uncorrected_bw} \\
+        --GC_corrected_bw_path ${corrected_bw} \\
+        --mappability_bw ${mappability_bw} \\
+        --chrom_sizes_path ${chrom_sizes_path} \\
+        --site_file ${site_file} \\
+        --chroms ${chroms.join(' ')} \\
+        --norm_window ${norm_window.join(' ')} \\
+        --save_window ${save_window.join(' ')} \\
+        --center_window ${center_window.join(' ')} \\
+        --fft_window ${fft_window.join(' ')} \\
+        --fft_index ${fft_index} \\
+        --smoothing_length ${smoothing_length} \\
+        --exclude_path ${exclude_path} \\
+        --step ${step} \\
+        --CNA_normalization ${cna_normalization_flag} \\
+        --individual ${individual_flag} \\
+        --smoothing ${smoothing_flag} \\
+        --exclude_outliers ${exclude_outliers_flag} \\
+        --exclude_zero_mappability ${exclude_zero_mappability_flag} \\
+        --number_of_sites ${number_of_sties} \\
+        --site_name ${site_name}
+
     """
 
     stub:
     """
-    
+    touch ${id}.Healthy_demo.GC_corrected.bw
+    touch ${id}.Healthy_demo.uncorrected.bw
+    touch ${id}.Healthy_demo.GC_corrected.coverage.tsv
+    touch ${id}.Healthy_demo.uncorrected.coverage.tsv
     """
 }

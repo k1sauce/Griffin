@@ -13,6 +13,24 @@ workflow GRIFFIN_NUCLEOSOME_PROFILING {
     size_range       // 100 200
     map_quality      // 20
 
+    mappability_bw   // ./Ref/k100_minus_exclusion_lists.mappable_regions.hg38.bw
+    save_window      // -1000 1000
+    center_window    // -30 30
+    fft_window       // -960 960
+    fft_index       // 10
+    smoothing_length // 165
+    exclude_path     // ./griffin/excluded_regions.bed
+    step            // 15
+    cna_normalization_flag // False 
+    individual_flag // False
+    smoothing_flag // True
+    exclude_outliers_flag // True
+    exclude_zero_mappability_flag // True
+    number_of_sties // none
+    site_name       // CTCF_demo
+
+
+
     main:
     GRIFFIN_COVERAGE(
         input_ch,
@@ -23,6 +41,29 @@ workflow GRIFFIN_NUCLEOSOME_PROFILING {
         norm_window,
         size_range,
         map_quality
+    )
+
+    GRIFFIN_MERGE_SITES(
+        GRIFFIN_COVERAGE.out.gc_bw,
+        mappability_bw,
+        chrom_sizes_path,
+        site_file,
+        chroms,
+        norm_window,
+        save_window,
+        center_window,
+        fft_window,
+        fft_index,
+        smoothing_length,
+        exclude_path,
+        step,
+        cna_normalization_flag,
+        individual_flag,
+        smoothing_flag,
+        exclude_outliers_flag,
+        exclude_zero_mappability_flag,
+        number_of_sties,
+        site_name
     )
 
     emit:

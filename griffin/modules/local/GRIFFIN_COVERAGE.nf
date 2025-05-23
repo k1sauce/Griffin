@@ -12,6 +12,7 @@ process GRIFFIN_COVERAGE {
     val(map_quality)
 
     output:
+    tuple val(meta), path("*.GC_corrected.bw"), path("*.uncorrected.bw"), emit: gc_bw
     tuple val(meta), path("*.GC_corrected.bw"), emit: gc_corrected_bw
     tuple val(meta), path("*.uncorrected.bw"), emit: uncorrected_bw
 

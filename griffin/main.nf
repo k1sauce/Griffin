@@ -16,6 +16,21 @@ workflow GRIFFIN {
     chroms = ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr20', 'chr21', 'chr22']
     normalization_window = [-5000, 5000]
     size_range = [100, 200]
+    mappability_bw = file('/Users/kyle/Projects/Griffin/Ref/k100_minus_exclusion_lists.mappable_regions.hg38.bw')
+    save_window = [-100, 1000]
+    center_window = [-30, 30]
+    fft_window = [-960, 960]
+    fft_index = 10
+    smoothing_length = 165
+    exclude_path = '/Users/kyle/Projects/Griffin/griffin/excluded_regions.bed'
+    step = 15
+    cna_normalization_flag = False
+    individual_flag = False
+    smoothing_flag = True
+    exclude_outliers_flag = True
+    exclude_zero_mappability_flag = True
+    number_of_sties = 'none' 
+    site_name = 'CTCF_demo'
 
     input_ch = Channel.from([
         [
@@ -60,7 +75,22 @@ workflow GRIFFIN {
         chroms,
         normalization_window,
         size_range,
-        map_q
+        map_q,
+        mappability_bw,   
+        save_window,      
+        center_window,    
+        fft_window,       
+        fft_index,       
+        smoothing_length, 
+        exclude_path,    
+        step,            
+        cna_normalization_flag, 
+        individual_flag, 
+        smoothing_flag, 
+        exclude_outliers_flag, 
+        exclude_zero_mappability_flag, 
+        number_of_sties, 
+        site_name       
     )
 }
 
