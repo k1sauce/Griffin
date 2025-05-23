@@ -1,5 +1,5 @@
 include { GRIFFIN_COVERAGE } from '../../modules/local/GRIFFIN_COVERAGE.nf'
-
+include { GRIFFIN_MERGE_SITES } from '../../modules/local/GRIFFIN_MERGE_SITES.nf'
 
 workflow GRIFFIN_NUCLEOSOME_PROFILING {
     
