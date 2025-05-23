@@ -74,11 +74,11 @@ process GRIFFIN_MERGE_SITES {
         --smoothing_length ${smoothing_length} \\
         --exclude_path ${exclude_path} \\
         --step ${step} \\
-        --CNA_normalization ${cna_normalization_flag} \\
-        --individual ${individual_flag} \\
-        --smoothing ${smoothing_flag} \\
-        --exclude_outliers ${exclude_outliers_flag} \\
-        --exclude_zero_mappability ${exclude_zero_mappability_flag} \\
+        --CNA_normalization ${cna_normalization_flag ? 'True' : 'False'} \\
+        --individual ${individual_flag ? 'True' : 'False'} \\
+        --smoothing ${smoothing_flag ? 'True' : 'False'} \\
+        --exclude_outliers ${exclude_outliers_flag ? 'True' : 'False'} \\
+        --exclude_zero_mappability ${exclude_zero_mappability_flag ? 'True' : 'False'} \\
         --number_of_sites ${number_of_sties} \\
         --site_name ${site_name}
 
