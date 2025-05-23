@@ -24,11 +24,11 @@ workflow GRIFFIN {
     smoothing_length = 165
     exclude_path = '/Users/kyle/Projects/Griffin/griffin/excluded_regions.bed'
     step = 15
-    cna_normalization_flag = False
-    individual_flag = False
-    smoothing_flag = True
-    exclude_outliers_flag = True
-    exclude_zero_mappability_flag = True
+    cna_normalization_flag = false
+    individual_flag = false
+    smoothing_flag = true
+    exclude_outliers_flag = true
+    exclude_zero_mappability_flag = true
     number_of_sties = 'none' 
     site_name = 'CTCF_demo'
 
