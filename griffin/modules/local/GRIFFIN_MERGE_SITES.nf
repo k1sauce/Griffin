@@ -51,10 +51,6 @@ process GRIFFIN_MERGE_SITES {
 
     output:
     tuple val(meta), path("${meta.id}.GC_corrected.coverage.tsv"), path("${meta.id}.uncorrected.coverage.tsv"), emit: merge_sites
-    tuple val(meta), path("${meta.id}.GC_corrected.bw"), emit: gc_corrected_bw
-    tuple val(meta), path("${meta.id}.uncorrected.bw"), emit: uncorrected_bw
-    tuple val(meta), path("${meta.id}.GC_corrected.coverage.tsv"), emit: gc_corrected_coverage_tsv
-    tuple val(meta), path("${meta.id}.uncorrected.coverage.tsv"), emit: uncorrected_coverage_tsv
 
     script:
     """
@@ -86,8 +82,6 @@ process GRIFFIN_MERGE_SITES {
 
     stub:
     """
-    touch ${meta.id}.Healthy_demo.GC_corrected.bw
-    touch ${meta.id}.Healthy_demo.uncorrected.bw
     touch ${meta.id}.Healthy_demo.GC_corrected.coverage.tsv
     touch ${meta.id}.Healthy_demo.uncorrected.coverage.tsv
     """

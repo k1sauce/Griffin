@@ -1,0 +1,40 @@
+nextflow_process {
+
+    name "Test Process GRIFFIN_COVERAGE"
+    script "modules/local/GRIFFIN_COVERAGE.nf"
+    process "GRIFFIN_COVERAGE"
+    tag "GRIFFIN_COVERAGE"
+
+    // 
+    test("GRIFFIN_COVERAGE_T01") {
+        when {
+            process {
+                // input_ch,
+                // reference_genome,
+                // chrom_sizes_path,
+                // site_file,
+                // chroms,
+                // norm_window,
+                // size_range,
+                // map_quality
+                """
+                input[0] = [val(meta), path(bam), path(bai), path(gc_bias_txt)]
+                reference_genome = 'test_ref.fa'
+                chrom_sizes_path = 'test.chrom.sizes'
+                site_file = 'test.sites.bed'
+                chroms = ['chr1', 'chr2']
+                norm_window = [-5000, 5000]
+                size_range = [100, 200]
+                map_quality = 20
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out.result).match("GENERATE_COUNTS_T01")
+            assertFirstRowHasCountOneAndOthersZero(process)
+        }
+    }
+
+}

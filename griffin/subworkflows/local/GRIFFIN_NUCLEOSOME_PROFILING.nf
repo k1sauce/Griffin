@@ -1,5 +1,6 @@
 include { GRIFFIN_COVERAGE } from '../../modules/local/GRIFFIN_COVERAGE.nf'
 include { GRIFFIN_MERGE_SITES } from '../../modules/local/GRIFFIN_MERGE_SITES.nf'
+include { GRIFFIN_PLOT } from '../../modules/local/GRIFFIN_PLOT.nf'
 
 workflow GRIFFIN_NUCLEOSOME_PROFILING {
     
@@ -66,8 +67,15 @@ workflow GRIFFIN_NUCLEOSOME_PROFILING {
         site_name
     )
 
+    GRIFFIN_PLOT(
+        GRIFFIN_MERGE_SITES.out.merge_sites,
+        save_window,
+        step
+    )
+
     emit:
     gc_corrected_bw = GRIFFIN_COVERAGE.out.gc_corrected_bw
-    uncorrected_bw = GRIFFIN_COVERAGE.out.uncorrected_bw
-    
+    uncorrected_bw  = GRIFFIN_COVERAGE.out.uncorrected_bw
+    merge_sites     = GRIFFIN_MERGE_SITES.out.merge_sites
+    pdf             = GRIFFIN_PLOT.out.pdf
 }
