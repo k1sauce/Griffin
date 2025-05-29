@@ -1,0 +1,35 @@
+nextflow_process {
+
+    name "Test Process GRIFFIN_GC_BIAS"
+    script "modules/local/GRIFFIN_GC_BIAS.nf"
+    process "GRIFFIN_GC_BIAS"
+    tag "GRIFFIN_GC_BIAS"
+
+    //
+    test("GRIFFIN_GC_BIAS_T01") {
+        when {
+            process {
+                """
+                input[0] = [
+                    [id: 'Healthy_demo', bam_file_name: 'Healthy_demo'],  
+                    file("${projectDir}/test_data/griffin_griffin_gc_and_mappability_correction_griffin_gc_counts/Healthy_demo.GC_counts.txt")
+                ]
+                input[1] = 'k100_minus_exclusion_lists.mappable_regions.hg38'
+                input[2] = Channel.fromPath(
+                    "${projectDir}/test_data/ref/genome_GC_frequency", 
+                    type : 'dir', 
+                    maxDepth : 0
+                )
+                input[3] = 15
+                input[4] = 500
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out.result).match("GRIFFIN_GC_BIAS_T01")
+        }
+    }
+
+}
