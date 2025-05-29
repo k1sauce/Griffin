@@ -1,0 +1,10 @@
+{
+    "GRIFFIN_MERGE_SITES_T01": {
+        "content": null,
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "25.04.2"
+        },
+        "timestamp": "2025-05-28T21:20:49.936244"
+    }
+}

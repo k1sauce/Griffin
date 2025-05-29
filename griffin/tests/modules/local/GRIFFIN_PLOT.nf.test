@@ -16,9 +16,9 @@ nextflow_process {
                 */
                 """
                 input[0] = [
-                    [id: 'GRIFFIN_PLOT_T01'], 
-                    file("${projectDir}/test_data/coverage/GRIFFIN_PLOT_T01.uncorrected.coverage.tsv"),
-                    file("${projectDir}/test_data/coverage/GRIFFIN_PLOT_T01.GC_corrected.coverage.tsv")
+                    [id: 'Healthy_demo', bam_file_name: 'Healthy_demo'],
+                    file("${projectDir}/test_data/griffin_griffin_nucleosome_profiling_griffin_merge_sites/Healthy_demo.uncorrected.coverage.tsv"),
+                    file("${projectDir}/test_data/griffin_griffin_nucleosome_profiling_griffin_merge_sites/Healthy_demo.GC_corrected.coverage.tsv")
                 ]
                 input[1] = [-1000, 1000]
                 input[2] = 15

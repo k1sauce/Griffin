@@ -1,0 +1,10 @@
+{
+    "GRIFFIN_PLOT_T01": {
+        "content": null,
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "25.04.2"
+        },
+        "timestamp": "2025-05-28T21:24:33.048508"
+    }
+}
