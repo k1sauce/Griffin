@@ -1,0 +1,35 @@
+nextflow_process {
+
+    name "Test Process GRIFFIN_PLOT"
+    script "modules/local/GRIFFIN_PLOT.nf"
+    process "GRIFFIN_PLOT"
+    tag "GRIFFIN_PLOT"
+
+    //
+    test("GRIFFIN_PLOT_T01") {
+        when {
+            process {
+                /*
+                tuple val(meta), path(uncorrected_coverage_tsv), path(gc_corrected_coverage_tsv)
+                val(save_window)
+                val(step)
+                */
+                """
+                input[0] = [
+                    [id: 'GRIFFIN_PLOT_T01'], 
+                    file("${projectDir}/test_data/coverage/GRIFFIN_PLOT_T01.uncorrected.coverage.tsv"),
+                    file("${projectDir}/test_data/coverage/GRIFFIN_PLOT_T01.GC_corrected.coverage.tsv")
+                ]
+                input[1] = [-1000, 1000]
+                input[2] = 15
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out.result).match("GRIFFIN_PLOT_T01")
+        }
+    }
+
+}

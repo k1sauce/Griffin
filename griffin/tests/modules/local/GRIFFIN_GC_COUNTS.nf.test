@@ -1,0 +1,43 @@
+nextflow_process {
+
+    name "Test Process GRIFFIN_GC_COUNTS"
+    script "modules/local/GRIFFIN_GC_COUNTS.nf"
+    process "GRIFFIN_GC_COUNTS"
+    tag "GRIFFIN_GC_COUNTS"
+
+    //
+    test("GRIFFIN_GC_COUNTS_T01") {
+        when {
+            process {
+                /*
+                tuple val(meta), path(bam), path(bai)
+                val mappable_regions_path
+                val ref_seq
+                val chrom_sizes
+                val map_q
+                val size_range_low
+                val size_range_high
+                */
+                """
+                input[0] = [
+                    [id: 'Healthy_demo', bam_file_name: 'Healthy_demo'], 
+                    file("${projectDir}/test_data/bam/Healthy_GSM1833219_downsampled.sorted.mini.bam"),
+                    file("${projectDir}/test_data/bam/Healthy_GSM1833219_downsampled.sorted.mini.bam.bai"),
+                ]
+                input[1] = file("${projectDir}/test_data/ref/k100_minus_exclusion_lists.mappable_regions.hg38.bed")
+                input[2] = file("${projectDir}/test_data/ref/hg38.fa")
+                input[3] = file("${projectDir}/test_data/ref/hg38.standard.chrom.sizes")
+                input[4] = 20
+                input[5] = 15
+                input[6] = 500
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert snapshot(process.out.result).match("GRIFFIN_GC_COUNTS_T01")
+        }
+    }
+
+}
